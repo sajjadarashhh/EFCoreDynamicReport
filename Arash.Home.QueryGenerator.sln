@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32427.441
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arash.Home.QueryGenerator", "Arash.Home.QueryGenerator\Arash.Home.QueryGenerator.csproj", "{C14C33F8-B58B-482B-B969-E569F5C540CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{2ACCDB3E-A7AE-4540-9ED1-B8D59C36C8A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arash.Home.QueryGenerator.Test", "ConsoleApp1\Arash.Home.QueryGenerator.Test.csproj", "{2ACCDB3E-A7AE-4540-9ED1-B8D59C36C8A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
