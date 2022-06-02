@@ -1,6 +1,4 @@
-﻿using Arash.Home.QueryGenerator.SqlQueryGenerator;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
 
 internal class Program
 {
@@ -8,7 +6,7 @@ internal class Program
     {
         Console.WriteLine("Hello, World!");
         DbContext db = new DbContext(new DbContextOptionsBuilder().Options);
-        var sqlGenerator = new SqlQueryGeneratorModule(db);
+        //var sqlGenerator = new SqlQueryGeneratorModule(db);
         Console.WriteLine(sqlGenerator.Generate);
         Dictionary<string, string> parameters = new Dictionary<string, string>();
         List<Dictionary<string, string>> parameterValues = new List<Dictionary<string, string>>();
