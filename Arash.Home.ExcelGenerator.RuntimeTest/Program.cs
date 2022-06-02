@@ -7,8 +7,7 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        ExcelGenerator excelGenerator = new ExcelGenerator();
-        //ExcelGenerator.CreateSpreadsheetWorkbook(Path.Combine(Directory.GetCurrentDirectory(), "arash.xlsx"));
+        ExcelGenerator excelGenerator = new ExcelGenerator(); 
         excelGenerator.GenerateExcel2(new ExcelGenerateVm<SimpleData>()
         {
             FilePath=Path.Combine(Directory.GetCurrentDirectory(),"arash.xlsx"),
