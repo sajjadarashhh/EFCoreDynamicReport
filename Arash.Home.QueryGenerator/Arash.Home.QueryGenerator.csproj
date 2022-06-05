@@ -13,4 +13,8 @@
     <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Arash.Home.QueryGenerator.Infrastructure\Arash.Home.QueryGenerator.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

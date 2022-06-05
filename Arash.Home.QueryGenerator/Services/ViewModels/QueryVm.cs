@@ -1,6 +1,6 @@
 ﻿using Arash.Home.QueryGenerator.Abstracts;
 
-namespace Arash.Home.QueryGenerator.QueryRequest
+namespace Arash.Home.QueryGenerator.Services.ViewModels
 {
     public class QueryVm
     {
