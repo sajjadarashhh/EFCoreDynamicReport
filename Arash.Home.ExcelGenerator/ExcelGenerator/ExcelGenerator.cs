@@ -8,18 +8,16 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator
     public class ExcelGenerator
     {
         private SpreadsheetDocument _spreadsheetDocument;
-        private string[] headerColumns = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".Split(','); 
+        private string[] headerColumns = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".Split(',');
         public void GenerateExcel2<TEntity>(ExcelGenerateVm<TEntity> generateVm) where TEntity : class, new()
         {
-            SpreadsheetDocument ssDoc = SpreadsheetDocument.Create(generateVm.FilePath,
-    SpreadsheetDocumentType.Workbook);
+            _spreadsheetDocument = SpreadsheetDocument.Create(generateVm.FilePath, SpreadsheetDocumentType.Workbook);
 
-            WorkbookPart workbookPart = ssDoc.AddWorkbookPart();
+            WorkbookPart workbookPart = _spreadsheetDocument.AddWorkbookPart();
             workbookPart.Workbook = new Workbook();
 
-            Sheets sheets = ssDoc.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
-
-            int sheetCount=0;
+            Sheets sheets = _spreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
+            int sheetCount = 0;
 
             foreach (var item in generateVm.Sheets)
             {
@@ -39,19 +37,35 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator
                         Cell cellInRow = CreateTextCell(headerColumns[colName++], props.GetValue(data).ToString(), rowIndex);
                         rowInSheet.Append(cellInRow);
                     }
-                    sheetData.Append(rowInSheet); 
+                    sheetData.Append(rowInSheet);
                 }
                 workSheet.AppendChild(sheetData);
                 worksheetPart.Worksheet = workSheet;
                 Sheet sheet = new Sheet()
                 {
-                    Id = ssDoc.WorkbookPart.GetIdOfPart(worksheetPart),
+                    Id = _spreadsheetDocument.WorkbookPart.GetIdOfPart(worksheetPart),
                     SheetId = 1,
                     Name = item.SheetName
                 };
                 sheets.Append(sheet);
-            } 
-            ssDoc.Close();
+            }
+            _spreadsheetDocument.Close();
+        }
+        public void GenerateExcel<TEntity>(ExcelGenerateVm<TEntity> generateVm) where TEntity : class, new()
+        {
+            _spreadsheetDocument = SpreadsheetDocument.Create(generateVm.FilePath, SpreadsheetDocumentType.Workbook);
+
+            WorkbookPart workbookPart = _spreadsheetDocument.AddWorkbookPart();
+            workbookPart.Workbook = new Workbook();
+
+            Sheets sheets = _spreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
+            int sheetCount = 0;
+
+            foreach (var item in generateVm.Sheets)
+            {
+                item.GenerateSheet(sheets, workbookPart, _spreadsheetDocument);
+            }
+            _spreadsheetDocument.Close();
         }
         Cell CreateTextCell(string header, string text, int index)
         {
@@ -65,6 +79,7 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator
             inlineString.AppendChild(t);
             c.AppendChild(inlineString);
             return c;
-        } 
+        }
+
     }
 }

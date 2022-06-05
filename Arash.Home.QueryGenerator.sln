@@ -5,9 +5,7 @@ VisualStudioVersion = 17.2.32427.441
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arash.Home.QueryGenerator", "Arash.Home.QueryGenerator\Arash.Home.QueryGenerator.csproj", "{C14C33F8-B58B-482B-B969-E569F5C540CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arash.Home.QueryGenerator.Test", "ConsoleApp1\Arash.Home.QueryGenerator.Test.csproj", "{2ACCDB3E-A7AE-4540-9ED1-B8D59C36C8A6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arash.Home.ExcelGenerator", "Arash.Home.ExcelGenerator\Arash.Home.ExcelGenerator.csproj", "{156E50F9-A76B-49D3-9106-4E5100E354A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arash.Home.ExcelGenerator", "Arash.Home.ExcelGenerator\Arash.Home.ExcelGenerator.csproj", "{156E50F9-A76B-49D3-9106-4E5100E354A1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. ReportManager", "01. ReportManager", "{661858F1-7D3D-450D-9CC6-85C6462FCCCD}"
 EndProject
@@ -19,6 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. Messaging", "02. Messag
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05. Tests", "05. Tests", "{AE0D73FC-9926-44D8-8F62-BA0F94E9997D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arash.ConsoleTest.ExcelGenerator", "Arash.ConsoleTest.ExcelGenerator\Arash.ConsoleTest.ExcelGenerator.csproj", "{71A107D7-AC57-4C6A-9BB3-E3CE69DC2F70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arash.Home.QueryGenerator.ConsoleTest", "Arash.Home.QueryGenerator.ConsoleTest\Arash.Home.QueryGenerator.ConsoleTest.csproj", "{7CE747D3-1295-4A76-B63B-7DC1A039EB29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,22 +31,27 @@ Global
 		{C14C33F8-B58B-482B-B969-E569F5C540CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C14C33F8-B58B-482B-B969-E569F5C540CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C14C33F8-B58B-482B-B969-E569F5C540CA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2ACCDB3E-A7AE-4540-9ED1-B8D59C36C8A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2ACCDB3E-A7AE-4540-9ED1-B8D59C36C8A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2ACCDB3E-A7AE-4540-9ED1-B8D59C36C8A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2ACCDB3E-A7AE-4540-9ED1-B8D59C36C8A6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{156E50F9-A76B-49D3-9106-4E5100E354A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{156E50F9-A76B-49D3-9106-4E5100E354A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{156E50F9-A76B-49D3-9106-4E5100E354A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{156E50F9-A76B-49D3-9106-4E5100E354A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71A107D7-AC57-4C6A-9BB3-E3CE69DC2F70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71A107D7-AC57-4C6A-9BB3-E3CE69DC2F70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71A107D7-AC57-4C6A-9BB3-E3CE69DC2F70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71A107D7-AC57-4C6A-9BB3-E3CE69DC2F70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CE747D3-1295-4A76-B63B-7DC1A039EB29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CE747D3-1295-4A76-B63B-7DC1A039EB29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CE747D3-1295-4A76-B63B-7DC1A039EB29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CE747D3-1295-4A76-B63B-7DC1A039EB29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C14C33F8-B58B-482B-B969-E569F5C540CA} = {4332F07B-DA04-4B5B-BE38-5BE61456EFD8}
-		{2ACCDB3E-A7AE-4540-9ED1-B8D59C36C8A6} = {AE0D73FC-9926-44D8-8F62-BA0F94E9997D}
 		{156E50F9-A76B-49D3-9106-4E5100E354A1} = {8F325D77-0DAF-4F78-9E4F-1BEDA5744010}
+		{71A107D7-AC57-4C6A-9BB3-E3CE69DC2F70} = {8F325D77-0DAF-4F78-9E4F-1BEDA5744010}
+		{7CE747D3-1295-4A76-B63B-7DC1A039EB29} = {4332F07B-DA04-4B5B-BE38-5BE61456EFD8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {866177DD-D27B-4AA1-8304-6085C305FC2A}
