@@ -5,7 +5,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Arash.Home.ExcelGenerator.ExcelGenerator
 {
-    public class ExcelGenerator
+    public class ExcelGenerator:IExcelGenerator
     {
         private SpreadsheetDocument _spreadsheetDocument;
         private string[] headerColumns = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".Split(',');
