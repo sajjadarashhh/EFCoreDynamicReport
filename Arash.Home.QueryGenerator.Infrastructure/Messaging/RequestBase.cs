@@ -5,5 +5,6 @@
     }
     public abstract class RequestBase<TEntity>:RequestBase
     {
+        public TEntity Entity { get; set; }
     }
 }

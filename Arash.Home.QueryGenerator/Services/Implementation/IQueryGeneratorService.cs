@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Arash.Home.QueryGenerator.Services.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Arash.Home.QueryGenerator.Services.Implementation
 {
-    internal interface IQueryGeneratorService
+    public interface IQueryGeneratorService
     {
+        Task<QueryGenerateResponse> GenerateQuery(QueryGenerateRequest request);
     }
 }

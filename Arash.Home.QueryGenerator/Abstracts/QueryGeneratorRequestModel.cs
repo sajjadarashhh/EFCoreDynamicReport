@@ -9,7 +9,7 @@
 
         public override string GenerateQuery()
         {
-            return $"select {string.Join(',',Fields.Select(a=>a.GenerateQuery()))} from {Schema}.{TableName} {(Filters?.Count>0?$"where {string.Join(" and ",Filters.Select(m=>m.GenerateQuery()))}":"")}";
+            return $"select {string.Join(',', Fields.Select(a => a.GenerateQuery()))} from {$"{(Schema?.Length > 0 ? $"{Schema}." : "")}{TableName}"} {(Filters?.Count > 0 ? $"where {string.Join(" and ", Filters.Select(m => m.GenerateQuery()))}" : "")}";
         }
     }
 }
