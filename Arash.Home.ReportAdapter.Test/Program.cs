@@ -27,12 +27,7 @@ internal class Program
                         {
                             DisplayName="محتوا",
                             FieldName="Content"
-                        },
-                        new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
-                        {
-                            DisplayName="محتواs",
-                            FieldName="Contents"
-                        },
+                        }
                     },
                     TableName = "Post"
                 }
