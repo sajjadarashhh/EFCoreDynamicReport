@@ -14,16 +14,21 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
         private readonly IQueryGeneratorService queryGeneratorService;
         private readonly IExcelGenerator excelGenerator;
         private readonly DbContext dbContext;
-
-        public ReportAdapterService(IQueryGeneratorService queryGeneratorService, IExcelGenerator excelGenerator, DbContext dbContext)
+        private readonly Func<ReportExecuteQueryRequest, Task<ReportExecuteQueryResponse>> ExecuteQueryCustom;
+        public ReportAdapterService(IQueryGeneratorService queryGeneratorService, IExcelGenerator excelGenerator, DbContext dbContext, Func<ReportExecuteQueryRequest, Task<ReportExecuteQueryResponse>> executeQueryCustom = null)
         {
             this.queryGeneratorService = queryGeneratorService;
             this.excelGenerator = excelGenerator;
             this.dbContext = dbContext;
+            ExecuteQueryCustom = executeQueryCustom;
         }
 
         public async Task<ReportExecuteQueryResponse> ExecuteQuery(ReportExecuteQueryRequest request)
         {
+            if (ExecuteQueryCustom is not null)
+            {
+                return await ExecuteQueryCustom.Invoke(request);
+            }
             try
             {
                 var response = new ReportExecuteQueryResponse();

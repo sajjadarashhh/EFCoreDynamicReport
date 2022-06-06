@@ -1,19 +1,36 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>EntityFrameworkCore.DynamicReport</Title>
+		<Authors>Sajjad arash</Authors>
+		<AssemblyVersion>1.0.0.1</AssemblyVersion>
+		<FileVersion>1.0.0.1</FileVersion>
+		<Version>1.0.3.4</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Arash.Home.ExcelGenerator\Arash.Home.ExcelGenerator.csproj" />
-    <ProjectReference Include="..\Arash.Home.QueryGenerator\Arash.Home.QueryGenerator.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Arash.Home.ExcelGenerator\Arash.Home.ExcelGenerator.csproj">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>ExcelGenerator.dll</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\Arash.Home.QueryGenerator.Infrastructure\Arash.Home.QueryGenerator.Infrastructure.csproj">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>Infrastructure.dll</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\Arash.Home.QueryGenerator\Arash.Home.QueryGenerator.csproj">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>QueryGenerator.dll</IncludeAssets>
+		</ProjectReference>
+	</ItemGroup>
 
 </Project>

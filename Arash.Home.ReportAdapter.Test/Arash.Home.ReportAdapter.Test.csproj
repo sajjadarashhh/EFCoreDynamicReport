@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Arash.Home.DynamicReports.DbTest\Arash.Home.DynamicReports.DbTest.csproj" />
+    <ProjectReference Include="..\Arash.Home.ExcelGenerator\Arash.Home.ExcelGenerator.csproj" />
+    <ProjectReference Include="..\Arash.Home.QueryGenerator\Arash.Home.QueryGenerator.csproj" />
     <ProjectReference Include="..\Arash.Home.ReportAdapter\Arash.Home.ReportAdapter.csproj" />
   </ItemGroup>
 
