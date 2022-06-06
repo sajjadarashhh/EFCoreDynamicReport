@@ -1,5 +1,7 @@
 ﻿using Arash.Home.ExcelGenerator.ExcelGenerator;
+using Arash.Home.QueryGenerator.Exceptions;
 using Arash.Home.QueryGenerator.Services.Implementation;
+using Arash.Home.QueryGenerator.Services.Messaging;
 using Arash.Home.ReportAdapter.ReportAdapterModule.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -13,10 +15,11 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
         private readonly IExcelGenerator excelGenerator;
         private readonly DbContext dbContext;
 
-        public ReportAdapterService(IQueryGeneratorService queryGeneratorService, IExcelGenerator excelGenerator)
+        public ReportAdapterService(IQueryGeneratorService queryGeneratorService, IExcelGenerator excelGenerator, DbContext dbContext)
         {
             this.queryGeneratorService = queryGeneratorService;
             this.excelGenerator = excelGenerator;
+            this.dbContext = dbContext;
         }
 
         public async Task<ReportExecuteQueryResponse> ExecuteQuery(ReportExecuteQueryRequest request)
@@ -31,27 +34,36 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                 };
                 using (var connection = dbContext.Database.GetDbConnection())
                 {
-                    using (var command = connection.CreateCommand())
+                    await connection.OpenAsync();
+                    try
                     {
-                        command.CommandText = request.Entity.Query;
-                        var result = await command.ExecuteReaderAsync();
-                        var haveResult = await result.ReadAsync();
-                        for (int i = 0; i < result.FieldCount; i++)
+                        using (var command = connection.CreateCommand())
                         {
-                            response.Entity.Names.Add(result.GetName(i));
-                        }
-                        if (haveResult)
-                            do
+                            command.CommandText = request.Entity.Query;
+                            var result = await command.ExecuteReaderAsync();
+                            var haveResult = await result.ReadAsync();
+                            for (int i = 0; i < result.FieldCount; i++)
                             {
-                                var row = new List<string>();
-                                for (int i = 0; i < result.FieldCount; i++)
-                                {
-                                    row.Add(result.GetValue(i)?.ToString() ?? "");
-                                }
-                                response.Entity.Values.Add(row);
+                                response.Entity.Names.Add(result.GetName(i));
                             }
-                            while (await result.NextResultAsync());
+                            if (haveResult)
+                                do
+                                {
+                                    var row = new List<string>();
+                                    for (int i = 0; i < result.FieldCount; i++)
+                                    {
+                                        row.Add(result.GetValue(i)?.ToString() ?? "");
+                                    }
+                                    response.Entity.Values.Add(row);
+                                }
+                                while (await result.NextResultAsync());
+                        }
                     }
+                    catch
+                    {
+
+                    }
+                    await connection.CloseAsync();
                 }
                 return response;
             }
@@ -70,17 +82,37 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
             var dictionary = obj as IDictionary<string, object>;
 
             foreach (var property in properties)
-                dictionary.Add("obj-"+new Random().Next(1000000000), property);
+                dictionary.Add("obj-" + new Random().Next(1000000000), property);
             return JsonConvert.DeserializeObject(JsonConvert.SerializeObject(dictionary));
         }
         public async Task<ReportCreateResponse> ReportCreate(ReportCreateRequest request)
         {
             try
             {
-                var response = await queryGeneratorService.GenerateQuery(new QueryGenerator.Services.Messaging.QueryGenerateRequest
+                QueryGenerateResponse response;
+                try
                 {
-                    Entity = request.Entity.QueryGenerateRequest
-                });
+                    response = await queryGeneratorService.GenerateQuery(new QueryGenerator.Services.Messaging.QueryGenerateRequest
+                    {
+                        Entity = request.Entity.QueryGenerateRequest
+                    });
+                }
+                catch (TableNotFoundException)
+                {
+                    return new ReportCreateResponse()
+                    {
+                        IsSuccess = false,
+                        Message = "Table not found"
+                    };
+                }
+                catch (ColumnNotFoundException ex)
+                {
+                    return new ReportCreateResponse()
+                    {
+                        IsSuccess = false,
+                        Message = ex.Message
+                    };
+                }
                 var queryResult = await ExecuteQuery(new ReportExecuteQueryRequest
                 {
                     Entity = new ViewModels.QueryExecuteVm
@@ -89,29 +121,25 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                     }
                 });
 
-                excelGenerator.GenerateExcel(new ExcelGenerator.ExcelGenerator.Model.ExcelGenerateVm<object>
+                excelGenerator.GenerateExcelFromAnonymousType(new ExcelGenerator.ExcelGenerator.Model.ExcelGenerateVm
                 {
-                    FilePath = Path.Combine(Directory.GetCurrentDirectory(),"test.xlsx"),
-                    Type= DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook,
-                    Sheets = new List<ExcelGenerator.ExcelGenerator.Model.ExcelWorksheetsVm<object>>
+                    FilePath = Path.Combine(Directory.GetCurrentDirectory(), "test.xlsx"),
+                    Type = DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook,
+                    Sheets = new List<ExcelGenerator.ExcelGenerator.Model.ExcelWorksheetsVm>
                     {
-                        new ExcelGenerator.ExcelGenerator.Model.ExcelWorksheetsVm<object>
+                        new ExcelGenerator.ExcelGenerator.Model.ExcelWorksheetsVm
                         {
                             SheetName="first",
-                            Data = new ExcelGenerator.ExcelGenerator.Model.ExcelSheetDataVm<object>
+                            Data = new ExcelGenerator.ExcelGenerator.Model.ExcelSheetDataVm
                             {
-                                Entities = new List<object>
-                                {
-                                    ToExpando(queryResult.Entity.Names),
-                                    
-                                }.Union(queryResult.Entity.Values.Select(m=>ToExpando(m))).ToList()
+                                Entities = new List<List<string>>{ queryResult.Entity.Names }.Union(queryResult.Entity.Values).ToList()
                             },
                         },
                     },
                 });
                 return new ReportCreateResponse
                 {
-                    IsSuccess=true,
+                    IsSuccess = true,
                     Message = "operation success."
                 };
             }

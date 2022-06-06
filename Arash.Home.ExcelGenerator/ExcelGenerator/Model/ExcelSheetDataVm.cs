@@ -7,6 +7,11 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator.Model
         public List<TEntity> Entities { get; set; }
 
     }
+    public class ExcelSheetDataVm
+    {
+        public List<List<string>> Entities { get; set; }
+
+    }
     internal static class ExcelDataHelper
     {
         private static string[] headerColumns = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".Split(',');
@@ -19,6 +24,18 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator.Model
             foreach (var props in properties)
             {
                 Cell cellInRow = CreateTextCell(headerColumns[colName++], props.GetValue(data).ToString(), rowIndex);
+                rowInSheet.Append(cellInRow);
+            }
+            sheetData.Append(rowInSheet);
+        }
+        public static void GenerateData(this List<string> data,ref int rowIndex, SheetData sheetData)
+        {
+            int colName = 0;
+            Row rowInSheet = new Row();
+            rowInSheet.RowIndex = (uint)++rowIndex;
+            foreach (var props in data)
+            {
+                Cell cellInRow = CreateTextCell(headerColumns[colName++], props, rowIndex);
                 rowInSheet.Append(cellInRow);
             }
             sheetData.Append(rowInSheet);

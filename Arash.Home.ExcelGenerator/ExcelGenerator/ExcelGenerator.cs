@@ -81,5 +81,21 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator
             return c;
         }
 
+        public void GenerateExcelFromAnonymousType(ExcelGenerateVm generateVm)
+        {
+            _spreadsheetDocument = SpreadsheetDocument.Create(generateVm.FilePath, SpreadsheetDocumentType.Workbook);
+
+            WorkbookPart workbookPart = _spreadsheetDocument.AddWorkbookPart();
+            workbookPart.Workbook = new Workbook();
+
+            Sheets sheets = _spreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
+            int sheetCount = 0;
+
+            foreach (var item in generateVm.Sheets)
+            {
+                item.GenerateSheet(sheets, workbookPart, _spreadsheetDocument);
+            }
+            _spreadsheetDocument.Close();
+        }
     }
 }

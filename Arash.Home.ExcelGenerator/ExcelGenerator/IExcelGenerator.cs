@@ -10,5 +10,6 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator
     public interface IExcelGenerator
     {
         void GenerateExcel<TEntity>(ExcelGenerateVm<TEntity> generateVm) where TEntity : class, new();
+        void GenerateExcelFromAnonymousType(ExcelGenerateVm generateVm);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Arash.Home.QueryGenerator.ConsoleTest.DataBase;
+﻿using Arash.Home.DynamicReports.DbTest.Database;
 using Arash.Home.QueryGenerator.Services.Implementation;
 
 internal class Program
