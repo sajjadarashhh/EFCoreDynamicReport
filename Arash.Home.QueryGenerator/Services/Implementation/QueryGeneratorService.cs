@@ -23,8 +23,9 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
                 throw new TableNotFoundException("specified table is not found.");
             model.TableName = entityType.GetTableName();
             model.Schema = entityType.GetSchema();
+            model.IsForJson = request.Entity.IsForJson;
             var invalidColumns = request.Entity.Fields.Where(a => entityType.GetProperties().All(m => m.GetColumnName(StoreObjectIdentifier.Table(model.TableName, null)) != a.FieldName));
-            if (invalidColumns.Count()>0)
+            if (invalidColumns.Count() > 0)
                 throw new ColumnNotFoundException($"specified column is not found Columns : {(string.Join(',', invalidColumns.Select(m => m.FieldName)))}.");
             model.Fields = request.Entity.Fields.Select(m => new QueryFieldsModel
             {
@@ -41,6 +42,33 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
                 Message = "operation success.",
                 IsSuccess = true,
             };
+        }
+
+        public async Task<QueryGetTableResponse> GetTables(QueryGetTableRequest request)
+        {
+            try
+            {
+                var entityTypes = dbContext.Model.GetEntityTypes();
+                return new QueryGetTableResponse
+                {
+                    IsSuccess = true,
+                    Entities = entityTypes.Select(a => new ViewModels.QueryTablesVm
+                    {
+                        Name = a.GetTableName(),
+                        Fields = a.GetProperties().ToDictionary(m => m.GetColumnName(StoreObjectIdentifier.Table(a.GetTableName(), null)), m => m.GetColumnName(StoreObjectIdentifier.Table(a.GetTableName(), null)))
+                    }).ToList(),
+                    Message = "operation success"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new QueryGetTableResponse
+                {
+                    Entities = null,
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
         }
     }
 }

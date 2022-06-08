@@ -81,15 +81,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                 };
             }
         }
-        private object ToExpando(List<string> properties)
-        {
-            var obj = new ExpandoObject();
-            var dictionary = obj as IDictionary<string, object>;
-
-            foreach (var property in properties)
-                dictionary.Add("obj-" + new Random().Next(1000000000), property);
-            return JsonConvert.DeserializeObject(JsonConvert.SerializeObject(dictionary));
-        }
+ 
         public async Task<ReportCreateResponse> ReportCreate(ReportCreateRequest request)
         {
             try

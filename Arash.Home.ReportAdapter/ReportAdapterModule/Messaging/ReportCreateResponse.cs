@@ -1,4 +1,4 @@
-﻿using Arash.Home.QueryGenerator.Infrastructure.Messaging;
+﻿using Arash.Home.QueryGenerator.Messaging;
 
 namespace Arash.Home.ReportAdapter.ReportAdapterModule.Messaging
 {

@@ -1,4 +1,4 @@
-﻿namespace Arash.Home.QueryGenerator.Infrastructure.Messaging
+﻿namespace Arash.Home.QueryGenerator.Messaging
 {
     public abstract class ResponseBase
     {
@@ -8,5 +8,9 @@
     public abstract class ResponseBase<TEntity> : ResponseBase
     {
         public TEntity Entity { get; set; }
+    }
+    public abstract class ResponseListBase<TEntity> : ResponseBase
+    {
+        public List<TEntity> Entities { get; set; }
     }
 }

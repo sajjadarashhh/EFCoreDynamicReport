@@ -10,5 +10,6 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
     public interface IQueryGeneratorService
     {
         Task<QueryGenerateResponse> GenerateQuery(QueryGenerateRequest request);
+        Task<QueryGetTableResponse> GetTables(QueryGetTableRequest request);
     }
 }
