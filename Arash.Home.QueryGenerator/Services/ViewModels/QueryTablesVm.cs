@@ -4,5 +4,6 @@
     {
         public string Name { get; set; }
         public Dictionary<string,string> Fields { get; set; }
+        public List<QueryDependencyVm> Dependencies { get; set; }
     }
 }

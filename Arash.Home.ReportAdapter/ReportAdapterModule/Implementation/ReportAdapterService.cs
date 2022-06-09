@@ -61,7 +61,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                                     }
                                     response.Entity.Values.Add(row);
                                 }
-                                while (await result.NextResultAsync());
+                                while (await result.ReadAsync());
                         }
                     }
                     catch
@@ -81,7 +81,12 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                 };
             }
         }
- 
+         
+        public async Task<QueryGetTableResponse> GetTables(QueryGetTableRequest request)
+        {
+            return await queryGeneratorService.GetTables(request);
+        }
+         
         public async Task<ReportCreateResponse> ReportCreate(ReportCreateRequest request)
         {
             try
@@ -102,7 +107,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                         Message = "Table not found"
                     };
                 }
-                catch (ColumnNotFoundException ex)
+                catch (DependencyNotFoundException ex)
                 {
                     return new ReportCreateResponse()
                     {
@@ -120,7 +125,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
 
                 excelGenerator.GenerateExcelFromAnonymousType(new ExcelGenerator.ExcelGenerator.Model.ExcelGenerateVm
                 {
-                    FilePath = Path.Combine(Directory.GetCurrentDirectory(), "test.xlsx"),
+                    FilePath = request.Entity.FilePath,
                     Type = DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook,
                     Sheets = new List<ExcelGenerator.ExcelGenerator.Model.ExcelWorksheetsVm>
                     {

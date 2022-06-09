@@ -17,24 +17,39 @@ internal class Program
                 QueryGenerateRequest = new Arash.Home.QueryGenerator.Services.ViewModels.QueryVm
                 {
                     Fields = new List<Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm>
+                {
+                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
                     {
-                        new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
-                        {
-                            DisplayName="عنوان",
-                            FieldName="Name"
-                        },
-                        new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
-                        {
-                            DisplayName="محتوا",
-                            FieldName="Content"
-                        }
+                        FieldName="Name",
+                        DisplayName = "Title"
                     },
-                    TableName = "Post"
+                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
+                    {
+                        FieldName="Content",
+                        DisplayName = "Content"
+                    },
+                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
+                    {
+                        DependecyName="FK_Post_CategoryModel_CategoryId",
+                        DisplayName="Category",
+                        FieldName="Name",
+                    }
+
+                },
+                    TableName = "Post", 
+                    Dependencies = new List<Arash.Home.QueryGenerator.Services.ViewModels.QueryDependencyVm>
+                {
+                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryDependencyVm
+                    {
+                        Name = "FK_Post_CategoryModel_CategoryId"
+                    }
                 }
+                },
+                FilePath =Path.Combine(Directory.GetCurrentDirectory(),"sajjadarash.xlsx")
             }
         }).Result;
-        if(result.IsSuccess)
-        Console.WriteLine("Operation Success.");
+        if (result.IsSuccess)
+            Console.WriteLine("Operation Success.");
         else
         {
             Console.WriteLine(result.Message);

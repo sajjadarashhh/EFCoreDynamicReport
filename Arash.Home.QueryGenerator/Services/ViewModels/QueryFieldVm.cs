@@ -4,5 +4,6 @@
     {
         public string FieldName { get; set; }
         public string DisplayName { get; set; }
+        public string DependecyName { get; set; }
     }
 }

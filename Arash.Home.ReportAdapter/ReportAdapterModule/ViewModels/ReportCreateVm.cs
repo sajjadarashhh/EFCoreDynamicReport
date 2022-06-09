@@ -6,5 +6,6 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.ViewModels
     public class ReportCreateVm
     {
         public QueryVm QueryGenerateRequest { get; set; }
+        public string FilePath { get; set; }
     }
 }
