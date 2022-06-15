@@ -39,6 +39,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                 };
                 using (var connection = dbContext.Database.GetDbConnection())
                 {
+                    connection.ConnectionString = dbContext.Database.GetConnectionString();
                     await connection.OpenAsync();
                     try
                     {
@@ -70,6 +71,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                     }
                     await connection.CloseAsync();
                 }
+                response.IsSuccess = true;
                 return response;
             }
             catch (Exception ex)
@@ -81,12 +83,37 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                 };
             }
         }
-         
+
+        public async Task<ReportExecuteQueryResponse> GetData(ReportGetDataRequest request)
+        {
+            var query = await queryGeneratorService.GenerateQuery(new QueryGenerateRequest
+            {
+                Entity = request.Entity
+            });
+            if (!query.IsSuccess)
+            {
+                return new ReportExecuteQueryResponse
+                {
+                    IsSuccess = query.IsSuccess,
+                    Entity = null,
+                    Message = query.Message
+                };
+            }
+            var result = await ExecuteQuery(new ReportExecuteQueryRequest
+            {
+                Entity = new ViewModels.QueryExecuteVm
+                {
+                    Query = query.Entity.Query
+                }
+            });
+            return result;
+        }
+
         public async Task<QueryGetTableResponse> GetTables(QueryGetTableRequest request)
         {
             return await queryGeneratorService.GetTables(request);
         }
-         
+
         public async Task<ReportCreateResponse> ReportCreate(ReportCreateRequest request)
         {
             try

@@ -6,5 +6,6 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
     {
         Task<ReportCreateResponse> ReportCreate(ReportCreateRequest request);
         Task<ReportExecuteQueryResponse> ExecuteQuery(ReportExecuteQueryRequest request);
+        Task<ReportExecuteQueryResponse> GetData(ReportGetDataRequest request);
     }
 }

@@ -7,6 +7,6 @@ namespace Arash.Home.DynamicReports.DbTest.Database.Table
     {
         [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Title { get; set; }
     }
 }

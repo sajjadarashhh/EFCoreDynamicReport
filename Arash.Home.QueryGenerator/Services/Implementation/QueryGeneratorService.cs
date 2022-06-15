@@ -24,10 +24,12 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
             model.TableName = entityType.GetTableName();
             model.Schema = entityType.GetSchema();
             model.IsForJson = request.Entity.IsForJson;
-            var invalidColumns = request.Entity.Fields.Where(a => entityType.GetProperties().All(m => m.GetColumnName(StoreObjectIdentifier.Table(model.TableName, null)) != a.FieldName));
-            if (invalidColumns.Count() > 0)
-                throw new ColumnNotFoundException($"specified column is not found Columns : {(string.Join(',', invalidColumns.Select(m => m.FieldName)))}.");
             var foreignKeys = entityType.GetForeignKeys();
+            var invalidColumns = request.Entity.Fields.Where(a => entityType.GetProperties().All(m => (a.DependecyName?.Length > 0 || m.GetColumnName(StoreObjectIdentifier.Table(model.TableName, null)) != a.FieldName)) &&
+            (a.DependecyName?.Length <= 0 || foreignKeys.Any(o => o.GetConstraintName() == a.DependecyName &&
+            o.PrincipalEntityType.GetProperties().All(m => m.GetColumnName(StoreObjectIdentifier.Table(o.PrincipalEntityType.GetTableName(), null)) != a.FieldName))));
+            if (invalidColumns.Count() > 0)
+                throw new ColumnNotFoundException($"specified column is not found Columns : {string.Join(',', invalidColumns.Select(m => m.FieldName))}.");
             model.Fields = request.Entity.Fields.Select(m =>
             {
                 if (m.DependecyName is not null)
@@ -66,7 +68,7 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
                 IsSuccess = true,
             };
         }
-
+         
         public async Task<QueryGetTableResponse> GetTables(QueryGetTableRequest request)
         {
             try

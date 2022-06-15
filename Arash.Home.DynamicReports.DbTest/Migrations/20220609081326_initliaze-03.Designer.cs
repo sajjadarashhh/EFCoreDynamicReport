@@ -4,6 +4,7 @@ using Arash.Home.DynamicReports.DbTest.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Arash.Home.DynamicReports.DbTest.Migrations
 {
     [DbContext(typeof(TestDb))]
-    partial class TestDbModelSnapshot : ModelSnapshot
+    [Migration("20220609081326_initliaze-03")]
+    partial class initliaze03
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
