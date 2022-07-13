@@ -1,5 +1,4 @@
 ﻿using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Arash.Home.ExcelGenerator.ExcelGenerator.Model
 {
@@ -13,6 +12,6 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator.Model
     {
         public string FilePath { get; set; }
         public SpreadsheetDocumentType Type { get; set; }
-        public List<ExcelWorksheetsVm> Sheets { get; set; }
+        public List<ExcelWorksheetsVm> Sheets { get; set; } 
     }
 }

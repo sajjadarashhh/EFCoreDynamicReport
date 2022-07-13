@@ -1,4 +1,5 @@
 ﻿using Arash.Home.ExcelGenerator.ExcelGenerator;
+using Arash.Home.ExcelGenerator.ExcelGenerator.AdapterOptions;
 using Arash.Home.QueryGenerator.Exceptions;
 using Arash.Home.QueryGenerator.Services.Implementation;
 using Arash.Home.QueryGenerator.Services.Messaging;
@@ -6,6 +7,7 @@ using Arash.Home.ReportAdapter.ReportAdapterModule.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Dynamic;
+using System.Reflection;
 
 namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
 {
@@ -14,13 +16,16 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
         private readonly IQueryGeneratorService queryGeneratorService;
         private readonly IExcelGenerator excelGenerator;
         private readonly DbContext dbContext;
+        private readonly List<AdapterBase> Adapters;
         private readonly Func<ReportExecuteQueryRequest, Task<ReportExecuteQueryResponse>> ExecuteQueryCustom;
-        public ReportAdapterService(IQueryGeneratorService queryGeneratorService, IExcelGenerator excelGenerator, DbContext dbContext, Func<ReportExecuteQueryRequest, Task<ReportExecuteQueryResponse>> executeQueryCustom = null)
+        public ReportAdapterService(IQueryGeneratorService queryGeneratorService, IExcelGenerator excelGenerator, DbContext dbContext, Func<ReportExecuteQueryRequest, Task<ReportExecuteQueryResponse>> executeQueryCustom = null, List<AdapterBase> _adapters=default(List<AdapterBase>))
         {
             this.queryGeneratorService = queryGeneratorService;
             this.excelGenerator = excelGenerator;
             this.dbContext = dbContext;
             ExecuteQueryCustom = executeQueryCustom;
+            Adapters = new List<AdapterBase>();
+            Adapters = Assembly.GetAssembly(this.GetType()).GetTypes().Where(a => a.BaseType == typeof(AdapterBase)).Select(a => (AdapterBase)Activator.CreateInstance(a)).ToList();
         }
 
         public async Task<ReportExecuteQueryResponse> ExecuteQuery(ReportExecuteQueryRequest request)
@@ -149,7 +154,18 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                         Query = response.Entity.Query
                     }
                 });
-
+                var adapterOptions = request.Entity.QueryGenerateRequest.Fields.Where(a=>a.CalculatorNames?.Any()??false).SelectMany(a => a.CalculatorNames.Select(m => new { name = a.DisplayName, calcName = Adapters.FirstOrDefault(a => a.Name == m) })).ToDictionary(o => o.name, m => m.calcName);
+                foreach (var item in queryResult.Entity.Values)
+                {
+                    for (int i = 0; i < item.Count; i++)
+                    {
+                        var itemAdapterOption = adapterOptions.Where(a => a.Key == queryResult.Entity.Names[i]);
+                        foreach (var option in itemAdapterOption)
+                        {
+                            item[i] = option.Value.Execute(item[i]);
+                        }
+                    }
+                }
                 excelGenerator.GenerateExcelFromAnonymousType(new ExcelGenerator.ExcelGenerator.Model.ExcelGenerateVm
                 {
                     FilePath = request.Entity.FilePath,

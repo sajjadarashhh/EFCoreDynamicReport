@@ -3,6 +3,7 @@ using Arash.Home.QueryGenerator.Exceptions;
 using Arash.Home.QueryGenerator.Services.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.ComponentModel;
 
 namespace Arash.Home.QueryGenerator.Services.Implementation
 {
@@ -57,7 +58,7 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
                     TableName = model.TableName
                 };
                 return dependencyModel;
-            }).ToList();
+            }).ToList(); 
             return new QueryGenerateResponse
             {
                 Entity = new ViewModels.QuerySQLVm
@@ -68,7 +69,7 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
                 IsSuccess = true,
             };
         }
-         
+
         public async Task<QueryGetTableResponse> GetTables(QueryGetTableRequest request)
         {
             try
@@ -80,7 +81,7 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
                     Entities = entityTypes.Select(a => new ViewModels.QueryTablesVm
                     {
                         Name = a.GetTableName(),
-                        Fields = a.GetProperties().ToDictionary(m => m.GetColumnName(StoreObjectIdentifier.Table(a.GetTableName(), null)), m => m.GetColumnName(StoreObjectIdentifier.Table(a.GetTableName(), null))),
+                        Fields = a.GetProperties().ToDictionary(m => m.GetColumnName(StoreObjectIdentifier.Table(a.GetTableName(), null)), m => (((DisplayNameAttribute)m.PropertyInfo.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault()).DisplayName ?? m.GetColumnName(StoreObjectIdentifier.Table(a.GetTableName(), null)))),
                         Dependencies = a.GetForeignKeys().Select(o => new ViewModels.QueryDependencyVm
                         {
                             Name = o.GetConstraintName(),

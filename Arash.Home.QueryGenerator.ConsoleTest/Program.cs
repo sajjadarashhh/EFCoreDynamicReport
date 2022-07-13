@@ -17,35 +17,40 @@ internal class Program
         {
             Entity = new Arash.Home.QueryGenerator.Services.ViewModels.QueryVm
             {
-                Fields=new List<Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm>
+                Fields = new List<Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm>
                 {
                     new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
                     {
                         FieldName="Name",
                         DisplayName = "Title"
-                    }, 
+                    },
                     new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
                     {
                         FieldName="Content",
                         DisplayName = "Content"
-                    }, 
+                    },
                     new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
                     {
                         DependecyName="FK_Post_CategoryModel_CategoryId",
                         DisplayName="Category",
                         FieldName="Name",
+                    },
+                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
+                    {
+                        DisplayName="تاریخ",
+                        FieldName="Date",
                     }
-                    
                 },
-                TableName= "Post",
-                IsForJson=true,
+                TableName = "Post",
+                IsForJson = true,
                 Dependencies = new List<Arash.Home.QueryGenerator.Services.ViewModels.QueryDependencyVm>
                 {
                     new Arash.Home.QueryGenerator.Services.ViewModels.QueryDependencyVm
                     {
                         Name = "FK_Post_CategoryModel_CategoryId"
                     }
-                }
+                },
+
             }
         }).Result;
         Console.WriteLine(result.Entity.Query);

@@ -89,7 +89,6 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator
             workbookPart.Workbook = new Workbook();
 
             Sheets sheets = _spreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
-            int sheetCount = 0;
 
             foreach (var item in generateVm.Sheets)
             {

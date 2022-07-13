@@ -11,7 +11,7 @@ internal class Program
     private static void Main(string[] args)
     {
         var db = new TestDb();
-        IReportAdapterService reportAdapter = new ReportAdapterService(new QueryGeneratorService(db), new ExcelGenerator(), db);
+        IReportAdapterService reportAdapter = new ReportAdapterService(new QueryGeneratorService(db), new ExcelGenerator(), db,_adapters: new List<Arash.Home.ExcelGenerator.ExcelGenerator.AdapterOptions.AdapterBase> { });
         var result = reportAdapter.ReportCreate(new Arash.Home.ReportAdapter.ReportAdapterModule.Messaging.ReportCreateRequest
         {
             Entity = new Arash.Home.ReportAdapter.ReportAdapterModule.ViewModels.ReportCreateVm
@@ -35,8 +35,13 @@ internal class Program
                         DependecyName="FK_Post_Category_CategoryId",
                         DisplayName="Category",
                         FieldName="Title",
+                    },
+                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
+                    {
+                        FieldName = "Date",
+                        DisplayName="تاریخ",
+                        CalculatorNames=new List<string>(){ "to-persian-date" }
                     }
-
                 },
                     TableName = "Post",
                     Dependencies = new List<Arash.Home.QueryGenerator.Services.ViewModels.QueryDependencyVm>
