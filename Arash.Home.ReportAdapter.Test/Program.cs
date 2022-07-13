@@ -1,9 +1,13 @@
 ﻿using Arash.Home.DynamicReports.DbTest.Database;
 using Arash.Home.ExcelGenerator.ExcelGenerator;
+using Arash.Home.ExcelGenerator.ExcelGenerator.AdapterOptions;
 using Arash.Home.QueryGenerator.ConsoleTest.DataBase;
 using Arash.Home.QueryGenerator.Services.Implementation;
+using Arash.Home.ReportAdapter;
 using Arash.Home.ReportAdapter.ReportAdapterModule.Implementation;
 using Arash.Home.ReportAdapter.ReportAdapterModule.Messaging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
 internal class Program
@@ -11,7 +15,14 @@ internal class Program
     private static void Main(string[] args)
     {
         var db = new TestDb();
-        IReportAdapterService reportAdapter = new ReportAdapterService(new QueryGeneratorService(db), new ExcelGenerator(), db,_adapters: new List<Arash.Home.ExcelGenerator.ExcelGenerator.AdapterOptions.AdapterBase> { });
+        IServiceCollection services = new ServiceCollection();
+        services.AddScoped<TestDb>();
+        services.AddScoped<DbContext, TestDb>();
+        services.ConfigureReportManager(adapters: new List<AdapterBase>
+        {
+            new ToPersianDate()
+        });
+        IReportAdapterService reportAdapter = services.BuildServiceProvider().GetRequiredService<IReportAdapterService>();
         var result = reportAdapter.ReportCreate(new Arash.Home.ReportAdapter.ReportAdapterModule.Messaging.ReportCreateRequest
         {
             Entity = new Arash.Home.ReportAdapter.ReportAdapterModule.ViewModels.ReportCreateVm

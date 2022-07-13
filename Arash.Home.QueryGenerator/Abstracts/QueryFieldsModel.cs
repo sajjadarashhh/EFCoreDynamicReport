@@ -8,7 +8,7 @@
 
         public override string GenerateQuery()
         {
-            return $"{ParentName}.{Name} as {DisplayName}";
+            return $"{ParentName}.{Name} as [{DisplayName}]";
         }
     }
 }

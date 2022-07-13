@@ -24,8 +24,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
             this.excelGenerator = excelGenerator;
             this.dbContext = dbContext;
             ExecuteQueryCustom = executeQueryCustom;
-            Adapters = new List<AdapterBase>();
-            Adapters = Assembly.GetAssembly(this.GetType()).GetTypes().Where(a => a.BaseType == typeof(AdapterBase)).Select(a => (AdapterBase)Activator.CreateInstance(a)).ToList();
+            Adapters = _adapters;
         }
 
         public async Task<ReportExecuteQueryResponse> ExecuteQuery(ReportExecuteQueryRequest request)
