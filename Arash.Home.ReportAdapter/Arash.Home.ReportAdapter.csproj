@@ -6,10 +6,10 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>EntityFrameworkCore.DynamicReport</Title>
 		<Authors>Sajjad arash</Authors>
-		<AssemblyVersion>1.0.0.3</AssemblyVersion>
-		<FileVersion>1.0.0.3</FileVersion>
+		<AssemblyVersion>1.0.0.4</AssemblyVersion>
+		<FileVersion>1.0.0.4</FileVersion>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<Version>1.2.1.6</Version>
+		<Version>1.2.1.7</Version>
 		<AnalysisLevel>none</AnalysisLevel>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>

@@ -8,7 +8,7 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator.AdapterOptions
 
         public override string Description => "";
 
-        public override string Execute(string value)
+        public override string Execute(int row, string value)
         {
             var dtt = DateTime.Parse(value);
             PersianCalendar pc = new PersianCalendar();

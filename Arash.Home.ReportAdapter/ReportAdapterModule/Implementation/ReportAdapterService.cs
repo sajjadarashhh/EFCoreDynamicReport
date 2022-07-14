@@ -177,6 +177,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                 });
                 ReportAdapterDataContainer reportAdapterData = new ReportAdapterDataContainer(queryResult.Entity.Values.Select(o => o.Select((m,i)=>new { m, i }).ToDictionary(a => queryResult.Entity.Names[a.i].Remove(queryResult.Entity.Names[a.i].Length-5), a => a.m)).ToList());
                 var adapterOptions = request.Entity.QueryGenerateRequest.Fields.Where(a => a.CalculatorNames?.Any() ?? false).SelectMany(a => a.CalculatorNames.Select(m => new { name = a.DisplayName, calcName = Adapters.FirstOrDefault(a => a.Name == m) })).ToDictionary(o => o.name, m => m.calcName);
+                int row = 0;
                 foreach (var item in queryResult.Entity.Values)
                 {
                     for (int i = 0; i < item.Count; i++)
@@ -185,9 +186,10 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                         foreach (var option in itemAdapterOption)
                         {
                             option.Value.setValues(reportAdapterData);
-                            item[i] = option.Value.Execute(item[i]);
+                            item[i] = option.Value.Execute(row,item[i]);
                         }
                     }
+                    row++;
                 }
                 var notMapped = queryResult.Entity.Names.Select((m, i) =>
                 {

@@ -3,7 +3,6 @@
     public class ReportAdapterDataContainer
     {
         private List<Dictionary<string, string>> Values { get; set; }
-
         public ReportAdapterDataContainer(List<Dictionary<string, string>> values)
         {
             Values = values;

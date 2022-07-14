@@ -11,6 +11,6 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator.AdapterOptions
         }
         public abstract string Name { get; }
         public abstract string Description { get; }
-        public abstract string Execute(string value);
+        public abstract string Execute(int row,string value);
     }
 }
