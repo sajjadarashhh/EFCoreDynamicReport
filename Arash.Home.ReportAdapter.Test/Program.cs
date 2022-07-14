@@ -47,12 +47,13 @@ internal class Program
                         DependecyName="FK_Post_Category_CategoryId",
                         DisplayName="Category",
                         FieldName="Title",
+                        IsMapped=false
                     },
                     new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
                     {
                         DisplayName="Date",
                         FieldName="Date",
-                        IsMapped=false
+                        CalculatorNames = new List<string>(){ "to-persian-date" }
                     },
                 },
                     TableName = "Post",

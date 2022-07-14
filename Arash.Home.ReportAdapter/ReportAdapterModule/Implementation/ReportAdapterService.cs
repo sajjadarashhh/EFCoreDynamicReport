@@ -175,7 +175,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                         Query = response.Entity.Query
                     }
                 });
-                ReportAdapterDataContainer reportAdapterData = new ReportAdapterDataContainer(queryResult.Entity.Values.Select(o => o.Select((m,i)=>new { m, i }).ToDictionary(a => queryResult.Entity.Names[a.i].Remove(queryResult.Entity.Names[a.i].Length-5), a => a.m)).ToList());
+                ReportAdapterDataContainer reportAdapterData = new ReportAdapterDataContainer(queryResult.Entity.Values.Select(o => o.Select((m, i) => new { m, i }).ToDictionary(a => queryResult.Entity.Names[a.i].Remove(queryResult.Entity.Names[a.i].Length - 5), a => a.m)).ToList());
                 var adapterOptions = request.Entity.QueryGenerateRequest.Fields.Where(a => a.CalculatorNames?.Any() ?? false).SelectMany(a => a.CalculatorNames.Select(m => new { name = a.DisplayName, calcName = Adapters.FirstOrDefault(a => a.Name == m) })).ToDictionary(o => o.name, m => m.calcName);
                 int row = 0;
                 foreach (var item in queryResult.Entity.Values)
@@ -186,7 +186,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                         foreach (var option in itemAdapterOption)
                         {
                             option.Value.setValues(reportAdapterData);
-                            item[i] = option.Value.Execute(row,item[i]);
+                            item[i] = option.Value.Execute(row, item[i]);
                         }
                     }
                     row++;
@@ -199,26 +199,21 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                         Index = i
                     };
                 }).Where(a => !a.IsMapped);
-                queryResult.Entity.Names = queryResult.Entity.Names.Select((m, i) => new { m, i }).Where(m => notMapped.All(o => o.Index != m.i)).Select(a => a.m.Remove(a.m.Length - 5)).ToList();
-                foreach (var item in queryResult.Entity.Values)
+                var groupKey = queryResult.Entity.Names.Select(a => a.Remove(a.Length - 5)).ToList().IndexOf(request.Entity.QueryGenerateRequest.GroupBy.DisplayName);
+                var sheets = queryResult.Entity.Values.GroupBy(a => a[groupKey]).Select(a =>
                 {
-                    for (int i = 0; i < item.Count; i++)
+                    return new
                     {
-                        if (notMapped.Any(a => a.Index == i))
-                            item.Remove(item[i]);
-                        else
-                            item[i] = item[i];
-                    }
-                }
-                var groupKey = queryResult.Entity.Names.IndexOf(request.Entity.QueryGenerateRequest.GroupBy.DisplayName);
-                var sheets = queryResult.Entity.Values.GroupBy(a => a[groupKey]).Select(a => new ExcelWorksheetsVm
+                        Key = a.Key,
+                        Items = a.Select(o => o.Select((m, i) => new { m, i }).Where(o => notMapped.All(f => f.Index != o.i)).Select(m => m.m).ToList()).ToList()
+                    };
+                }).Select(a => new ExcelWorksheetsVm
                 {
                     SheetName = a.Key,
                     Data = new ExcelSheetDataVm
                     {
-                        Entities = new List<List<string>> { queryResult.Entity.Names }.Union(a.ToList()).ToList(),
+                        Entities = new List<List<string>> { queryResult.Entity.Names.Select((m, i) => new { m, i }).Where(m => notMapped.All(o => o.Index != m.i)).Select(a => a.m.Remove(a.m.Length - 5)).ToList() }.Union(a.Items).ToList(),
                     },
-
                 }).ToList();
                 excelGenerator.GenerateExcelFromAnonymousType(new ExcelGenerateVm
                 {
