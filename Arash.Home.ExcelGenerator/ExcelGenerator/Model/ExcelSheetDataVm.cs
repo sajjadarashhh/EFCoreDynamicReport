@@ -2,7 +2,7 @@
 
 namespace Arash.Home.ExcelGenerator.ExcelGenerator.Model
 {
-    public class ExcelSheetDataVm<TEntity> where TEntity : class,new()
+    public class ExcelSheetDataVm<TEntity> where TEntity : class, new()
     {
         public List<TEntity> Entities { get; set; }
 
@@ -28,7 +28,7 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator.Model
             }
             sheetData.Append(rowInSheet);
         }
-        public static void GenerateData(this List<string> data,ref int rowIndex, SheetData sheetData)
+        public static void GenerateData(this List<string> data, ref int rowIndex, SheetData sheetData)
         {
             int colName = 0;
             Row rowInSheet = new Row();
@@ -45,7 +45,6 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator.Model
             Cell c = new Cell();
             c.DataType = CellValues.InlineString;
             c.CellReference = header + index;
-
             InlineString inlineString = new InlineString();
             Text t = new Text();
             t.Text = text;

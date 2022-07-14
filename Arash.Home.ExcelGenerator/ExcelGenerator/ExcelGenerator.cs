@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using System.Globalization;
 
 namespace Arash.Home.ExcelGenerator.ExcelGenerator
 {
@@ -82,18 +83,19 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator
         }
 
         public void GenerateExcelFromAnonymousType(ExcelGenerateVm generateVm)
-        {
+        { 
             _spreadsheetDocument = SpreadsheetDocument.Create(generateVm.FilePath, SpreadsheetDocumentType.Workbook);
 
             WorkbookPart workbookPart = _spreadsheetDocument.AddWorkbookPart();
             workbookPart.Workbook = new Workbook();
 
             Sheets sheets = _spreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
-
+            UInt32Value id = 0;
             foreach (var item in generateVm.Sheets)
             {
-                item.GenerateSheet(sheets, workbookPart, _spreadsheetDocument);
+                item.GenerateSheet(sheets, workbookPart, _spreadsheetDocument,++id);
             }
+
             _spreadsheetDocument.Close();
         }
     }

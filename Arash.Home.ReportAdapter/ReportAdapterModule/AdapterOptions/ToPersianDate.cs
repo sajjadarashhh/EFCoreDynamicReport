@@ -12,7 +12,7 @@ namespace Arash.Home.ExcelGenerator.ExcelGenerator.AdapterOptions
         {
             var dtt = DateTime.Parse(value);
             PersianCalendar pc = new PersianCalendar();
-            return $"{pc.GetYear(dtt)}-{pc.GetMonth(dtt)}-{pc.GetDayOfMonth(dtt)} {pc.GetHour(dtt)}:{pc.GetMinute(dtt)}-{pc.GetSecond(dtt)}";
+            return $"{pc.GetYear(dtt)}-{pc.GetMonth(dtt)}-{pc.GetDayOfMonth(dtt)} {pc.GetHour(dtt)}:{pc.GetMinute(dtt)}:{pc.GetSecond(dtt)}";
         }
     }
 }

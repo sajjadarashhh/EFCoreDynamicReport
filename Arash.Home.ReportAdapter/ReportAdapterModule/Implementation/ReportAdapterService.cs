@@ -1,9 +1,12 @@
 ﻿using Arash.Home.ExcelGenerator.ExcelGenerator;
 using Arash.Home.ExcelGenerator.ExcelGenerator.AdapterOptions;
+using Arash.Home.ExcelGenerator.ExcelGenerator.Model;
 using Arash.Home.QueryGenerator.Exceptions;
 using Arash.Home.QueryGenerator.Services.Implementation;
 using Arash.Home.QueryGenerator.Services.Messaging;
+using Arash.Home.ReportAdapter.ReportAdapterModule.Abstracts;
 using Arash.Home.ReportAdapter.ReportAdapterModule.Messaging;
+using Arash.Home.ReportAdapter.ReportAdapterModule.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Dynamic;
@@ -18,7 +21,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
         private readonly DbContext dbContext;
         private readonly List<AdapterBase> Adapters;
         private readonly Func<ReportExecuteQueryRequest, Task<ReportExecuteQueryResponse>> ExecuteQueryCustom;
-        public ReportAdapterService(IQueryGeneratorService queryGeneratorService, IExcelGenerator excelGenerator, DbContext dbContext, Func<ReportExecuteQueryRequest, Task<ReportExecuteQueryResponse>> executeQueryCustom = null, List<AdapterBase> _adapters=default(List<AdapterBase>))
+        public ReportAdapterService(IQueryGeneratorService queryGeneratorService, IExcelGenerator excelGenerator, DbContext dbContext, Func<ReportExecuteQueryRequest, Task<ReportExecuteQueryResponse>> executeQueryCustom = null, List<AdapterBase> _adapters = default(List<AdapterBase>))
         {
             this.queryGeneratorService = queryGeneratorService;
             this.excelGenerator = excelGenerator;
@@ -110,6 +113,25 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                     Query = query.Entity.Query
                 }
             });
+            var notMapped = result.Entity.Names.Select((m, i) =>
+            {
+                return new
+                {
+                    IsMapped = m.Substring(m.Length - 5) == "isits",
+                    Index = i
+                };
+            }).Where(a => !a.IsMapped);
+            result.Entity.Names = result.Entity.Names.Select((m, i) => new { m, i }).Where(m => notMapped.All(o => o.Index != m.i)).Select(a => a.m.Remove(a.m.Length - 5)).ToList();
+            foreach (var item in result.Entity.Values)
+            {
+                for (int i = 0; i < item.Count; i++)
+                {
+                    if (notMapped.Any(a => a.Index == i))
+                        item.Remove(item[i]);
+                    else
+                        item[i] = item[i];
+                }
+            }
             return result;
         }
 
@@ -153,7 +175,8 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                         Query = response.Entity.Query
                     }
                 });
-                var adapterOptions = request.Entity.QueryGenerateRequest.Fields.Where(a=>a.CalculatorNames?.Any()??false).SelectMany(a => a.CalculatorNames.Select(m => new { name = a.DisplayName, calcName = Adapters.FirstOrDefault(a => a.Name == m) })).ToDictionary(o => o.name, m => m.calcName);
+                ReportAdapterDataContainer reportAdapterData = new ReportAdapterDataContainer(queryResult.Entity.Values.Select(o => o.Select((m,i)=>new { m, i }).ToDictionary(a => queryResult.Entity.Names[a.i].Remove(queryResult.Entity.Names[a.i].Length-5), a => a.m)).ToList());
+                var adapterOptions = request.Entity.QueryGenerateRequest.Fields.Where(a => a.CalculatorNames?.Any() ?? false).SelectMany(a => a.CalculatorNames.Select(m => new { name = a.DisplayName, calcName = Adapters.FirstOrDefault(a => a.Name == m) })).ToDictionary(o => o.name, m => m.calcName);
                 foreach (var item in queryResult.Entity.Values)
                 {
                     for (int i = 0; i < item.Count; i++)
@@ -161,25 +184,45 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                         var itemAdapterOption = adapterOptions.Where(a => a.Key == queryResult.Entity.Names[i]);
                         foreach (var option in itemAdapterOption)
                         {
+                            option.Value.setValues(reportAdapterData);
                             item[i] = option.Value.Execute(item[i]);
                         }
                     }
                 }
-                excelGenerator.GenerateExcelFromAnonymousType(new ExcelGenerator.ExcelGenerator.Model.ExcelGenerateVm
+                var notMapped = queryResult.Entity.Names.Select((m, i) =>
+                {
+                    return new
+                    {
+                        IsMapped = m.Substring(m.Length - 5) == "isits",
+                        Index = i
+                    };
+                }).Where(a => !a.IsMapped);
+                queryResult.Entity.Names = queryResult.Entity.Names.Select((m, i) => new { m, i }).Where(m => notMapped.All(o => o.Index != m.i)).Select(a => a.m.Remove(a.m.Length - 5)).ToList();
+                foreach (var item in queryResult.Entity.Values)
+                {
+                    for (int i = 0; i < item.Count; i++)
+                    {
+                        if (notMapped.Any(a => a.Index == i))
+                            item.Remove(item[i]);
+                        else
+                            item[i] = item[i];
+                    }
+                }
+                var groupKey = queryResult.Entity.Names.IndexOf(request.Entity.QueryGenerateRequest.GroupBy.DisplayName);
+                var sheets = queryResult.Entity.Values.GroupBy(a => a[groupKey]).Select(a => new ExcelWorksheetsVm
+                {
+                    SheetName = a.Key,
+                    Data = new ExcelSheetDataVm
+                    {
+                        Entities = new List<List<string>> { queryResult.Entity.Names }.Union(a.ToList()).ToList(),
+                    },
+
+                }).ToList();
+                excelGenerator.GenerateExcelFromAnonymousType(new ExcelGenerateVm
                 {
                     FilePath = request.Entity.FilePath,
                     Type = DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook,
-                    Sheets = new List<ExcelGenerator.ExcelGenerator.Model.ExcelWorksheetsVm>
-                    {
-                        new ExcelGenerator.ExcelGenerator.Model.ExcelWorksheetsVm
-                        {
-                            SheetName="first",
-                            Data = new ExcelGenerator.ExcelGenerator.Model.ExcelSheetDataVm
-                            {
-                                Entities = new List<List<string>>{ queryResult.Entity.Names }.Union(queryResult.Entity.Values).ToList()
-                            },
-                        },
-                    },
+                    Sheets = sheets
                 });
                 return new ReportCreateResponse
                 {

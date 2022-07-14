@@ -3,6 +3,7 @@ using Arash.Home.ExcelGenerator.ExcelGenerator;
 using Arash.Home.ExcelGenerator.ExcelGenerator.AdapterOptions;
 using Arash.Home.QueryGenerator.ConsoleTest.DataBase;
 using Arash.Home.QueryGenerator.Services.Implementation;
+using Arash.Home.QueryGenerator.Services.ViewModels;
 using Arash.Home.ReportAdapter;
 using Arash.Home.ReportAdapter.ReportAdapterModule.Implementation;
 using Arash.Home.ReportAdapter.ReportAdapterModule.Messaging;
@@ -49,10 +50,10 @@ internal class Program
                     },
                     new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
                     {
-                        FieldName = "Date",
-                        DisplayName="تاریخ",
-                        CalculatorNames=new List<string>(){ "to-persian-date" }
-                    }
+                        DisplayName="Date",
+                        FieldName="Date",
+                        IsMapped=false
+                    },
                 },
                     TableName = "Post",
                     Dependencies = new List<Arash.Home.QueryGenerator.Services.ViewModels.QueryDependencyVm>
@@ -61,7 +62,11 @@ internal class Program
                     {
                         Name = "FK_Post_Category_CategoryId"
                     }
-                }
+                },
+                    GroupBy = new QueryFieldVm
+                    {
+                        DisplayName = "Title"
+                    }
                 },
                 FilePath = Path.Combine(Directory.GetCurrentDirectory(), "sajjadarash.xlsx")
             }

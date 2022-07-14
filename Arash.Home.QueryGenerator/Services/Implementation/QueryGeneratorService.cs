@@ -40,6 +40,7 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
                     DisplayName = m.DisplayName,
                     Name = m.FieldName,
                     ParentName = m.DependecyName ?? model.TableName,
+                    IsMapped = m.IsMapped
                 };
             }).ToList();
             var invalidDepndecies = request.Entity.Dependencies.Where(m => foreignKeys.All(o => o.GetConstraintName() != m.Name));

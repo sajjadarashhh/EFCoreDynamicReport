@@ -8,5 +8,6 @@ namespace Arash.Home.QueryGenerator.Services.ViewModels
         public bool IsForJson { get; set; }
         public List<QueryFieldVm> Fields { get; set; }
         public List<QueryDependencyVm> Dependencies { get; set; }
+        public QueryFieldVm GroupBy { get; set; }
     }
 }
