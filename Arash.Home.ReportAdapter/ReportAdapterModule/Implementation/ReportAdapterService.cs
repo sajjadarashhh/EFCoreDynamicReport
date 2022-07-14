@@ -182,7 +182,7 @@ namespace Arash.Home.ReportAdapter.ReportAdapterModule.Implementation
                 {
                     for (int i = 0; i < item.Count; i++)
                     {
-                        var itemAdapterOption = adapterOptions.Where(a => a.Key == queryResult.Entity.Names[i]);
+                        var itemAdapterOption = adapterOptions.Where(a => a.Key == queryResult.Entity.Names[i].Remove(queryResult.Entity.Names[i].Length-5));
                         foreach (var option in itemAdapterOption)
                         {
                             option.Value.setValues(reportAdapterData);

@@ -7,6 +7,7 @@ using Arash.Home.QueryGenerator.Services.ViewModels;
 using Arash.Home.ReportAdapter;
 using Arash.Home.ReportAdapter.ReportAdapterModule.Implementation;
 using Arash.Home.ReportAdapter.ReportAdapterModule.Messaging;
+using Arash.Home.ReportAdapter.Test.AdapterOptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -21,7 +22,8 @@ internal class Program
         services.AddScoped<DbContext, TestDb>();
         services.ConfigureReportManager(adapters: new List<AdapterBase>
         {
-            new ToPersianDate()
+            new ToPersianDate(),
+            new CheckIsCalculationalValidityWorks()
         });
         IReportAdapterService reportAdapter = services.BuildServiceProvider().GetRequiredService<IReportAdapterService>();
         var result = reportAdapter.ReportCreate(new Arash.Home.ReportAdapter.ReportAdapterModule.Messaging.ReportCreateRequest
@@ -48,6 +50,14 @@ internal class Program
                         DisplayName="Category",
                         FieldName="Title",
                         IsMapped=false
+                    },
+                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
+                    {
+                        DependecyName="FK_Post_Category_CategoryId",
+                        DisplayName="FullName", 
+                        IsCalculational=true,
+                        CalculatorNames = new List<string>(){ "name-plus-title" }
+
                     },
                     new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
                     {

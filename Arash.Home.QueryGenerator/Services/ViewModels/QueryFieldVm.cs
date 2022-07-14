@@ -7,5 +7,6 @@
         public string DependecyName { get; set; }
         public List<string> CalculatorNames { get; set; }
         public bool IsMapped { get; set; } = true;
+        public bool IsCalculational { get; set; } = false;
     }
 }
