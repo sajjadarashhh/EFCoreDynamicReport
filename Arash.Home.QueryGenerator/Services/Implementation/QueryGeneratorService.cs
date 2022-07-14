@@ -26,7 +26,7 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
             model.Schema = entityType.GetSchema();
             model.IsForJson = request.Entity.IsForJson;
             var foreignKeys = entityType.GetForeignKeys();
-            var invalidColumns = request.Entity.Fields.Where(a => a.IsCalculational==false && entityType.GetProperties().All(m => (a.DependecyName?.Length > 0 || m.GetColumnName(StoreObjectIdentifier.Table(model.TableName, null)) != a.FieldName)) &&
+            var invalidColumns = request.Entity.Fields.Where(a => a.IsCalculational == false && entityType.GetProperties().All(m => (a.DependecyName?.Length > 0 || m.GetColumnName(StoreObjectIdentifier.Table(model.TableName, null)) != a.FieldName)) &&
             (a.DependecyName?.Length <= 0 || foreignKeys.Any(o => o.GetConstraintName() == a.DependecyName &&
             o.PrincipalEntityType.GetProperties().All(m => m.GetColumnName(StoreObjectIdentifier.Table(o.PrincipalEntityType.GetTableName(), null)) != a.FieldName))));
             if (invalidColumns.Count() > 0)
@@ -41,9 +41,10 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
                     Name = m.FieldName,
                     ParentName = m.DependecyName ?? model.TableName,
                     IsMapped = m.IsMapped,
-                    IsCalculational = m.IsCalculational
+                    IsCalculational = m.IsCalculational,
                 };
             }).ToList();
+            model.Filters = request.Entity.Filters;
             var invalidDepndecies = request.Entity.Dependencies.Where(m => foreignKeys.All(o => o.GetConstraintName() != m.Name));
             if (invalidColumns.Count() > 0)
             {

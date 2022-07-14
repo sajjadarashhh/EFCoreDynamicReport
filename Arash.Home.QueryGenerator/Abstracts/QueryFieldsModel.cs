@@ -9,7 +9,7 @@
         public bool IsCalculational { get; set; } = false;
         public override string GenerateQuery()
         {
-            return IsCalculational ? $"null as [{DisplayName}{(IsMapped ? "isits" : "isnot")}]" : $"{ParentName}.{Name} as [{DisplayName}{(IsMapped ? "isits" : "isnot")}]";
+            return IsCalculational ? $"null {(string.IsNullOrEmpty(DisplayName) ? "" : $"as [{DisplayName}{(IsMapped ? "isits" : "isnot")}]")}" : $"{(ParentName?.Length > 0 ? $"{ParentName}." : "")}{Name} {(string.IsNullOrEmpty(DisplayName) ? "" : $"as [{DisplayName}{(IsMapped ? "isits" : "isnot")}]")}";
         }
     }
 }
