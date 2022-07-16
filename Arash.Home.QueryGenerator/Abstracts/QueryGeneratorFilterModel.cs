@@ -11,7 +11,7 @@
         public FilterMode Mode { get; set; }
         public override string GenerateQuery()
         {
-            return $"{RightField.GenerateQuery()} {Mode switch { FilterMode.Equal=>"=" }} {LeftSide.GenerateQuery()}";
+            return $"{LeftSide.GenerateQuery()} {Mode switch { FilterMode.Equal=>"=" }} {RightField.GenerateQuery()}";
         }
     }
 }

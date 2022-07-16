@@ -84,7 +84,7 @@ namespace Arash.Home.QueryGenerator.Services.Implementation
                     Entities = entityTypes.Select(a => new ViewModels.QueryTablesVm
                     {
                         Name = a.GetTableName(),
-                        Fields = a.GetProperties().ToDictionary(m => m.GetColumnName(StoreObjectIdentifier.Table(a.GetTableName(), null)), m => (((DisplayNameAttribute)m.PropertyInfo.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault()).DisplayName ?? m.GetColumnName(StoreObjectIdentifier.Table(a.GetTableName(), null)))),
+                        Fields = a.GetProperties().ToDictionary(m => m.GetColumnName(StoreObjectIdentifier.Table(a.GetTableName(), null)), m => (((DisplayNameAttribute)m.PropertyInfo.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault())?.DisplayName ?? m.GetColumnName(StoreObjectIdentifier.Table(a.GetTableName(), null)))),
                         Dependencies = a.GetForeignKeys().Select(o => new ViewModels.QueryDependencyVm
                         {
                             Name = o.GetConstraintName(),

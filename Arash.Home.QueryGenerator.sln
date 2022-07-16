@@ -17,15 +17,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. ReportAdapter", "02. Re
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05. Tests", "05. Tests", "{AE0D73FC-9926-44D8-8F62-BA0F94E9997D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arash.ConsoleTest.ExcelGenerator", "Arash.ConsoleTest.ExcelGenerator\Arash.ConsoleTest.ExcelGenerator.csproj", "{71A107D7-AC57-4C6A-9BB3-E3CE69DC2F70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arash.ConsoleTest.ExcelGenerator", "Arash.ConsoleTest.ExcelGenerator\Arash.ConsoleTest.ExcelGenerator.csproj", "{71A107D7-AC57-4C6A-9BB3-E3CE69DC2F70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arash.Home.QueryGenerator.ConsoleTest", "Arash.Home.QueryGenerator.ConsoleTest\Arash.Home.QueryGenerator.ConsoleTest.csproj", "{7CE747D3-1295-4A76-B63B-7DC1A039EB29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arash.Home.QueryGenerator.ConsoleTest", "Arash.Home.QueryGenerator.ConsoleTest\Arash.Home.QueryGenerator.ConsoleTest.csproj", "{7CE747D3-1295-4A76-B63B-7DC1A039EB29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arash.Home.ReportAdapter", "Arash.Home.ReportAdapter\Arash.Home.ReportAdapter.csproj", "{E009DF9A-759F-4C05-A853-6ED233202DBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arash.Home.ReportAdapter", "Arash.Home.ReportAdapter\Arash.Home.ReportAdapter.csproj", "{E009DF9A-759F-4C05-A853-6ED233202DBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arash.Home.ReportAdapter.Test", "Arash.Home.ReportAdapter.Test\Arash.Home.ReportAdapter.Test.csproj", "{87487031-02B8-4344-9D6D-4838575C2B40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arash.Home.ReportAdapter.Test", "Arash.Home.ReportAdapter.Test\Arash.Home.ReportAdapter.Test.csproj", "{87487031-02B8-4344-9D6D-4838575C2B40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arash.Home.DynamicReports.DbTest", "Arash.Home.DynamicReports.DbTest\Arash.Home.DynamicReports.DbTest.csproj", "{9ED4AF65-DB27-4A09-AE74-DDF9BF3ED1CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arash.Home.DynamicReports.DbTest", "Arash.Home.DynamicReports.DbTest\Arash.Home.DynamicReports.DbTest.csproj", "{9ED4AF65-DB27-4A09-AE74-DDF9BF3ED1CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

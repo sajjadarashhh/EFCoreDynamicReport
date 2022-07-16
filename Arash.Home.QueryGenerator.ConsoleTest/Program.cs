@@ -1,5 +1,7 @@
 ﻿using Arash.Home.DynamicReports.DbTest.Database;
+using Arash.Home.QueryGenerator.Abstracts;
 using Arash.Home.QueryGenerator.Services.Implementation;
+using Arash.Home.QueryGenerator.Services.ViewModels;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
@@ -15,27 +17,42 @@ internal class Program
         Console.InputEncoding = System.Text.Encoding.UTF8;
         var result = queryGeneratorService.GenerateQuery(new Arash.Home.QueryGenerator.Services.Messaging.QueryGenerateRequest
         {
-            Entity = new Arash.Home.QueryGenerator.Services.ViewModels.QueryVm
-            {
-                Fields = new List<Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm>
+            Entity = new QueryVm
+            { 
+                Filters = new List<QueryGeneratorFilterModel>
                 {
-                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
+                    new QueryGeneratorFilterModel
+                    {
+                        RightField= new QueryFieldsModel()
+                        {
+                            Name="content",
+                            ParentName="Category"
+                        },
+                        LeftSide = new QueryValueModel()
+                        {
+                            Value = ""
+                        }
+                    }
+                },
+                Fields = new List<QueryFieldVm>
+                {
+                    new QueryFieldVm
                     {
                         FieldName="Name",
                         DisplayName = "Title"
                     },
-                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
+                    new QueryFieldVm
                     {
                         FieldName="Content",
                         DisplayName = "Content"
                     },
-                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
+                    new QueryFieldVm
                     {
-                        DependecyName="FK_Post_CategoryModel_CategoryId",
+                        DependecyName="FK_Post_Category_CategoryId",
                         DisplayName="Category",
-                        FieldName="Name",
+                        FieldName="Title",
                     },
-                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryFieldVm
+                    new QueryFieldVm
                     {
                         DisplayName="تاریخ",
                         FieldName="Date",
@@ -43,11 +60,11 @@ internal class Program
                 },
                 TableName = "Post",
                 IsForJson = true,
-                Dependencies = new List<Arash.Home.QueryGenerator.Services.ViewModels.QueryDependencyVm>
+                Dependencies = new List<QueryDependencyVm>
                 {
-                    new Arash.Home.QueryGenerator.Services.ViewModels.QueryDependencyVm
+                    new QueryDependencyVm
                     {
-                        Name = "FK_Post_CategoryModel_CategoryId"
+                        Name = "FK_Post_Category_CategoryId"
                     }
                 },
 

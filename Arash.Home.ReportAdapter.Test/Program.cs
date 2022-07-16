@@ -38,13 +38,13 @@ internal class Program
                     {
                         new QueryGeneratorFilterModel
                         {
-                            RightField = new QueryFieldsModel
-                            {
-                                Name = "Name"
-                            },
-                            LeftSide= new QueryValueModel
+                            RightField =new QueryValueModel
                             {
                                 Value = "تره"
+                            },
+                            LeftSide=  new QueryFieldsModel
+                            {
+                                Name = "Name"
                             },
                             Mode = FilterMode.Equal
                         }
